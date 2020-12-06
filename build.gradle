@@ -4,7 +4,7 @@ plugins {
     id 'maven-publish'
 }
 
-group 'com.github.artemkaxboy'
+group 'com.artemkaxboy'
 version '0.1.0'
 
 sourceCompatibility = 11
