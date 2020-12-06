@@ -1,0 +1,23 @@
+plugins {
+    id 'java'
+    id 'java-gradle-plugin'
+    id 'maven-publish'
+}
+
+group 'com.github.artemkaxboy'
+version '0.1.0'
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly "com.google.cloud.tools:jib-gradle-plugin-extension-api:0.4.0"
+
+    testImplementation "com.google.cloud.tools:jib-gradle-plugin-extension-api:0.4.0"
+    testImplementation "junit:junit:4.13.1"
+    testImplementation "org.mockito:mockito-core:3.4.6"
+}
