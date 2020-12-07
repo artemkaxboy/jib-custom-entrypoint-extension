@@ -3,8 +3,6 @@ plugins {
     id "maven-publish"
 }
 
-version "0.1.0"
-
 dependencies {
     compileOnly "com.google.cloud.tools:jib-gradle-plugin-extension-api:${dependencyVersions.JIB_GRADLE_EXTENSION}"
 
