@@ -2,4 +2,4 @@ jdk:
   - openjdk11
 
 install:
-  - lib/gradlew --project-dir lib publishToMavenLocal
+  - lib/gradlew --project-dir lib publishToMavenLocal --project-prop version=${VERSION}
