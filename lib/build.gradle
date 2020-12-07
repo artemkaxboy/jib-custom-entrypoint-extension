@@ -1,0 +1,67 @@
+// define all versioned plugins here and apply in subprojects as necessary without version
+plugins {
+    id 'com.github.sherter.google-java-format' version '0.9' apply false
+}
+
+subprojects {
+    group 'com.artemkaxboy'
+
+    repositories {
+        mavenCentral()
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'checkstyle'
+    apply plugin: 'com.github.sherter.google-java-format'
+
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    /* PROJECT DEPENDENCY VERSIONS */
+    // define all common versioned dependencies here
+    project.ext.dependencyVersions = [
+
+            JIB_CORE: '0.15.0',
+            JIB_GRADLE: '2.7.0',
+
+            // for Build Plan and Jib Plugins Extension API
+            JIB_GRADLE_EXTENSION: '0.4.0',
+            JIB_MAVEN_EXTENSION: '0.4.0',
+
+            MAVEN_API: '3.6.3',
+
+            //test
+            JUNIT: '4.13.1',
+            MOCKITO_CORE: '3.4.6',
+            SLF4J_API: '1.7.30',
+    ]
+    /* PROJECT DEPENDENCY VERSIONS */
+
+    /* GOOGLE JAVA FORMAT */
+    googleJavaFormat {
+        toolVersion = '1.6'
+    }
+    check.dependsOn verifyGoogleJavaFormat
+    /* GOOGLE JAVA FORMAT */
+
+    /* JAVADOC ENFORCEMENT */
+    // Fail build on javadoc warnings
+    tasks.withType(Javadoc) {
+        options.addBooleanOption('Xwerror', true)
+    }
+    assemble.dependsOn javadoc
+    /* JAVADOC ENFORCEMENT */
+
+    /* JAR */
+    jar {
+        manifest {
+            attributes 'Implementation-Title': project.name,
+                    'Implementation-Version': version,
+                    'Built-By': System.getProperty('user.name'),
+                    'Built-Date': new Date(),
+                    'Built-JDK': System.getProperty('java.version'),
+                    'Built-Gradle': gradle.gradleVersion
+        }
+    }
+    /* JAR */
+}

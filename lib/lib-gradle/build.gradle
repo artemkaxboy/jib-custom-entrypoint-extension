@@ -1,0 +1,12 @@
+plugins {
+    id "java-gradle-plugin"
+    id "maven-publish"
+}
+
+dependencies {
+    compileOnly "com.google.cloud.tools:jib-gradle-plugin-extension-api:${dependencyVersions.JIB_GRADLE_EXTENSION}"
+
+    testImplementation "com.google.cloud.tools:jib-gradle-plugin-extension-api:${dependencyVersions.JIB_GRADLE_EXTENSION}"
+    testImplementation "junit:junit:${dependencyVersions.JUNIT}"
+    testImplementation "org.mockito:mockito-core:${dependencyVersions.MOCKITO_CORE}"
+}
