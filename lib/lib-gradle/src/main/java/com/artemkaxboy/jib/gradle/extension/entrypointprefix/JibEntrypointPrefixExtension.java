@@ -22,8 +22,8 @@ public class JibEntrypointPrefixExtension implements JibGradlePluginExtension<Co
       Map<String, String> properties,
       Optional<Configuration> configuration,
       GradleData gradleData,
-      ExtensionLogger logger
-  ) throws JibPluginExtensionException {
+      ExtensionLogger logger)
+      throws JibPluginExtensionException {
     logger.log(ExtensionLogger.LogLevel.LIFECYCLE, "Running Jib Entrypoint Prefix Extension");
 
     List<String> entrypoint = buildPlan.getEntrypoint();
@@ -31,16 +31,14 @@ public class JibEntrypointPrefixExtension implements JibGradlePluginExtension<Co
       throw new JibPluginExtensionException(getClass(), "cannot get image entrypoint");
     }
 
-    if (configuration.isEmpty()) {
-      logger.log(ExtensionLogger.LogLevel.WARN,
-          "Nothing configured for Jib Entrypoint Prefix Extension");
+    if (!configuration.isPresent()) {
+      logger.log(
+          ExtensionLogger.LogLevel.WARN, "Nothing configured for Jib Entrypoint Prefix Extension");
       return buildPlan;
     }
 
     entrypoint.addAll(0, configuration.get().getEntrypointPrefix());
 
-    return buildPlan.toBuilder()
-        .setEntrypoint(entrypoint)
-        .build();
+    return buildPlan.toBuilder().setEntrypoint(entrypoint).build();
   }
 }

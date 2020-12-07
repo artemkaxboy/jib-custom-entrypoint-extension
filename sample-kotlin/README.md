@@ -6,7 +6,7 @@ Project shows how to use [Entrypoint Prefix extension](https://github.com/artemk
 
 ### Add buildscript.dependencies
 
-First of all you need to add dependency to build.gradle.kts:
+First you need to add dependency to build.gradle.kts:
 
 ```kotlin
 // should be at the top of build.gradle.kts
