@@ -3,3 +3,6 @@ jdk:
 
 install:
   - lib/gradlew --project-dir lib publishToMavenLocal
+
+build:
+  - lib/gradlew --project-dir lib assemble
