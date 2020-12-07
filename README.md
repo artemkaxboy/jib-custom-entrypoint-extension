@@ -2,9 +2,27 @@
 
 ## How to use
 
-### Add buildscript.dependencies
+### Gradle
 
-First you need to add dependency to build.gradle.kts:
+#### Add buildscript.dependencies
+
+```build.gradle```:
+
+```groovy
+// should be at the top of build.gradle
+buildscript {
+
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+
+    dependencies {
+        classpath "com.artemkaxboy:jib-entrypoint-prefix-extension-gradle:0.1.1"
+    }
+}
+```
+
+or ```build.gradle.kts```:
 
 ```kotlin
 // should be at the top of build.gradle.kts
@@ -20,11 +38,11 @@ buildscript {
 }
 ```
 
-### Add Jib plugin
+#### Add Jib plugin
 
-Add Jib plugin to build.gradle.kts:
+```build.gradle```/```build.gradle.kts```:
 
-```kotlin
+```groovy
 plugins {
     ...
     // Google JIB dependency
@@ -32,9 +50,9 @@ plugins {
 }
 ```
 
-### Setup entrypoint prefix
+#### Setup entrypoint prefix
 
-Setup entrypoint prefix in ```jib``` plugin section of build.gradle.kts:
+```build.gradle.kts```:
 
 ```kotlin
 jib {
@@ -46,6 +64,23 @@ jib {
             configuration(Action<com.artemkaxboy.jib.gradle.extension.entrypointprefix.Configuration> {
                 setEntrypointPrefix("/files/wait-for-it.sh google.com:80 --")
             })
+        }
+    }
+}
+```
+
+or ```build.gradle```:
+
+```groovy
+jib {
+    ...
+    
+    pluginExtensions {
+        pluginExtension {
+            implementation = "com.artemkaxboy.jib.gradle.extension.entrypointprefix.JibEntrypointPrefixExtension"
+            configuration {
+                setEntrypointPrefix("/files/wait-for-it.sh google.com:80 --")
+            }
         }
     }
 }
