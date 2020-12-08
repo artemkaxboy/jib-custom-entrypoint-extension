@@ -10,9 +10,11 @@ subprojects {
         mavenCentral()
     }
 
-    apply plugin: 'java'
+    apply plugin: 'java-library'
     apply plugin: 'checkstyle'
     apply plugin: 'com.github.sherter.google-java-format'
+    apply plugin: 'signing'
+    apply plugin: 'maven-publish'
 
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -64,4 +66,34 @@ subprojects {
         }
     }
     /* JAR */
+
+    /* PUBLISHING */
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+            }
+        }
+
+        repositories {
+            maven {
+                def staging = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+                def snapshot = "https://oss.sonatype.org/content/repositories/snapshots"
+
+                url = version.endsWith('SNAPSHOT') ? snapshot : staging
+
+                credentials {
+                    username = ""
+                    password = ""
+                }
+            }
+        }
+    }
+    /* PUBLISHING */
+
+    /* SIGNING */
+    signing {
+        sign publishing.publications.mavenJava
+    }
+    /* SIGNING */
 }
