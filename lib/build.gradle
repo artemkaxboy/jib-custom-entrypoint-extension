@@ -1,6 +1,18 @@
+//buildscript {
+//    repositories {
+//        mavenCentral()
+        //Needed only for SNAPSHOT versions
+        //maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
+//    }
+//    dependencies {
+//        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.22.0"
+//    }
+//}
+
 // define all versioned plugins here and apply in subprojects as necessary without version
 plugins {
     id 'com.github.sherter.google-java-format' version '0.9' apply false
+//    id 'io.codearte.nexus-staging'
 }
 
 subprojects {
@@ -14,7 +26,7 @@ subprojects {
     apply plugin: 'checkstyle'
     apply plugin: 'com.github.sherter.google-java-format'
     apply plugin: 'signing'
-    apply plugin: 'maven-publish'
+    apply plugin: 'maven'
 
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -68,32 +80,101 @@ subprojects {
     /* JAR */
 
     /* PUBLISHING */
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                from components.java
-            }
-        }
+//    publishing {
+//        publications {
+//            mavenJava(MavenPublication) {
+//                from components.java
+//                artifactId = "jib-entrypoint-prefix-extension-gradle"
+//            }
+//        }
+//
+//        repositories {
+//            maven {
+//                def staging = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+//                def snapshot = "https://oss.sonatype.org/content/repositories/snapshots"
+//
+//                url = version.endsWith('SNAPSHOT') ? snapshot : staging
+//
+//                credentials {
+//                    username = findProperty('ossrhUsername')
+//                    password = findProperty('ossrhPassword')
+//                }
+//            }
+//        }
+//    }
+    task javadocJar(type: Jar) {
+        classifier = 'javadoc'
+        from javadoc
+    }
 
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives javadocJar, sourcesJar
+    }
+
+    // https://central.sonatype.org/pages/gradle.html
+    uploadArchives {
         repositories {
-            maven {
-                def staging = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
-                def snapshot = "https://oss.sonatype.org/content/repositories/snapshots"
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-                url = version.endsWith('SNAPSHOT') ? snapshot : staging
+                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
 
-                credentials {
-                    username = ""
-                    password = ""
+                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
+
+                pom.project {
+                    name 'Gradle Jib Extension'
+                    packaging 'jar'
+                    // optionally artifactId can be defined here
+                    description 'Test description'
+                    url 'https://github.com/artemkaxboy/jib-entrypoint-prefix-extension'
+
+                    scm {
+                        connection 'https://github.com/artemkaxboy/jib-entrypoint-prefix-extension'
+                        developerConnection 'https://github.com/artemkaxboy/jib-entrypoint-prefix-extension'
+                        url 'https://github.com/artemkaxboy/jib-entrypoint-prefix-extension'
+                    }
+
+                    licenses {
+                        license {
+                            name 'The Apache License, Version 2.0'
+                            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id 'artemkaxboy'
+                            name 'Artem Kolin'
+                            email 'artemkaxboy@gmail.com'
+                        }
+                    }
                 }
             }
         }
     }
+
+
     /* PUBLISHING */
+
+    /* RELEASING */
+//    nexusStaging {
+//        packageGroup = "com.artemkaxboy" //optional if packageGroup == project.getGroup()
+//        stagingProfileId = "artemkaxboy"
+//    }
+    /* RELEASING */
 
     /* SIGNING */
     signing {
-        sign publishing.publications.mavenJava
+        sign configurations.archives
     }
     /* SIGNING */
 }
