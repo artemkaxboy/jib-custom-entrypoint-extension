@@ -12,12 +12,8 @@
 // should be at the top of build.gradle
 buildscript {
 
-    repositories {
-        maven { url 'https://jitpack.io' }
-    }
-
     dependencies {
-        classpath "com.artemkaxboy:jib-entrypoint-prefix-extension-gradle:0.1.1"
+        classpath "com.artemkaxboy:jib-entrypoint-prefix-extension-gradle:0.0.2"
     }
 }
 ```
@@ -28,12 +24,8 @@ or ```build.gradle.kts```:
 // should be at the top of build.gradle.kts
 buildscript {
 
-    repositories {
-        maven { url = uri("https://jitpack.io") }
-    }
-
     dependencies {
-        classpath("com.artemkaxboy:jib-entrypoint-prefix-extension-gradle:0.1.1")
+        classpath("com.artemkaxboy:jib-entrypoint-prefix-extension-gradle:0.0.2")
     }
 }
 ```
@@ -57,7 +49,6 @@ plugins {
 ```kotlin
 jib {
     ...
-
     pluginExtensions {
         pluginExtension {
             implementation = "com.artemkaxboy.jib.gradle.extension.entrypointprefix.JibEntrypointPrefixExtension"
@@ -74,7 +65,6 @@ or ```build.gradle```:
 ```groovy
 jib {
     ...
-    
     pluginExtensions {
         pluginExtension {
             implementation = "com.artemkaxboy.jib.gradle.extension.entrypointprefix.JibEntrypointPrefixExtension"

@@ -4,12 +4,8 @@
 
 buildscript {
 
-    repositories {
-        maven { url = uri("https://jitpack.io") }
-    }
-
     dependencies {
-        classpath("com.artemkaxboy:jib-entrypoint-prefix-extension-gradle:0.1.1")
+        classpath("com.artemkaxboy:jib-entrypoint-prefix-extension-gradle:0.0.2")
     }
 }
 
@@ -22,10 +18,6 @@ plugins {
     id("com.google.cloud.tools.jib") version "2.7.0"
 }
 
-repositories {
-    mavenCentral()
-}
-
 group = "com.artemkaxboy"
 // version will be used as a docker image tag
 version = "1.0-SNAPSHOT"
@@ -35,6 +27,10 @@ jib {
     // default image does not contain anything except java, even shell, but adoptopenjdk does
     from {
         image = "adoptopenjdk:11-jdk"
+    }
+
+    to {
+        image = "jib-custom-prefix"
     }
 
     // copy custom script into image and make it executable

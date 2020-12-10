@@ -1,0 +1,44 @@
+# Jobs to run on PR, tests, lint, check, etc.
+name: Default branch verification
+
+on:
+  push:
+    branches:
+      - publishing
+
+jobs:
+
+  test-default:
+    name: Test default branch
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-default
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Setup java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      - name: Run check
+        # @doc https://github.com/eskatos/gradle-command-action
+        uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: |
+            getStagingProfile -i
+              -Psigning.password=${{ secrets.CONTAINER_REGISTRY_TOKEN }}
+              -PossrhUsername=${{ secrets.CONTAINER_REGISTRY_TOKEN }}
+              -PossrhPassword=${{ secrets.CONTAINER_REGISTRY_TOKEN }}
+          wrapper-directory: lib
+          build-root-directory: lib
