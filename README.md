@@ -51,8 +51,8 @@ jib {
     ...
     pluginExtensions {
         pluginExtension {
-            implementation = "com.artemkaxboy.jib.gradle.extension.entrypointprefix.JibEntrypointPrefixExtension"
-            configuration(Action<com.artemkaxboy.jib.gradle.extension.entrypointprefix.Configuration> {
+            implementation = "JibEntrypointPrefixExtension"
+            configuration(Action<Configuration> {
                 setEntrypointPrefix("/files/wait-for-it.sh google.com:80 --")
             })
         }
@@ -67,7 +67,7 @@ jib {
     ...
     pluginExtensions {
         pluginExtension {
-            implementation = "com.artemkaxboy.jib.gradle.extension.entrypointprefix.JibEntrypointPrefixExtension"
+            implementation = "JibEntrypointPrefixExtension"
             configuration {
                 setEntrypointPrefix("/files/wait-for-it.sh google.com:80 --")
             }
