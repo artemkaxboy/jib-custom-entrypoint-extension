@@ -5,8 +5,12 @@
 buildscript {
 
     dependencies {
-        classpath("com.artemkaxboy:jib-entrypoint-prefix-extension-gradle:0.0.2")
+        classpath("com.artemkaxboy:jib-custom-entrypoint-extension-gradle:0.0.1")
     }
+}
+
+repositories {
+    mavenCentral()
 }
 
 plugins {

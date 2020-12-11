@@ -1,8 +1,8 @@
-rootProject.name = 'jib-entrypoint-prefix-extension'
+rootProject.name = "jib-custom-entrypoint-extension"
 
 include ":lib-gradle"
-project(":lib-gradle").name = "jib-entrypoint-prefix-extension-gradle"
+project(":lib-gradle").name = "jib-custom-entrypoint-extension-gradle"
 
-include ':lib-maven'
-project(":lib-maven").name = "jib-entrypoint-prefix-extension-maven"
+include ":lib-maven"
+project(":lib-maven").name = "jib-custom-entrypoint-extension-maven"
 

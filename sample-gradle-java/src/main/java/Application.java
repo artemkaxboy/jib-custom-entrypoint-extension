@@ -1,6 +1,10 @@
+// The most simple example of application
+
 public class Application {
 
   public static void main(String[] args) {
-    System.out.println("Hello from java-app");
+    String argString = String.join(", ", args);
+    String outString = argString.isEmpty() ? "sample-gradle-java" : argString;
+    System.out.println("Hello from " + outString);
   }
 }

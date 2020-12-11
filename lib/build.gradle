@@ -17,12 +17,12 @@ subprojects {
         mavenCentral()
     }
 
-    apply plugin: 'java-library'
-//    apply plugin: 'checkstyle'
-    apply plugin: 'com.github.sherter.google-java-format'
-    apply plugin: 'signing'
-    apply plugin: 'maven'
-    apply plugin: 'io.codearte.nexus-staging'
+    apply plugin: "java-library"
+//    apply plugin: "checkstyle"
+    apply plugin: "com.github.sherter.google-java-format"
+    apply plugin: "signing"
+    apply plugin: "maven"
+    apply plugin: "io.codearte.nexus-staging"
 
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -109,12 +109,12 @@ subprojects {
                     packaging "jar"
                     // optionally artifactId can be defined here
                     description "Allows customizing entrypoint."
-                    url "https://github.com/artemkaxboy/jib-entrypoint-prefix-extension"
+                    url "https://github.com/artemkaxboy/jib-custom-entrypoint-extension"
 
                     scm {
-                        connection "https://github.com/artemkaxboy/jib-entrypoint-prefix-extension"
-                        developerConnection "https://github.com/artemkaxboy/jib-entrypoint-prefix-extension"
-                        url "https://github.com/artemkaxboy/jib-entrypoint-prefix-extension"
+                        connection "https://github.com/artemkaxboy/jib-custom-entrypoint-extension"
+                        developerConnection "https://github.com/artemkaxboy/jib-custom-entrypoint-extension"
+                        url "https://github.com/artemkaxboy/jib-custom-entrypoint-extension"
                     }
 
                     licenses {
