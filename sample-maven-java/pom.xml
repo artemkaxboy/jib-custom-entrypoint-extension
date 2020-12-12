@@ -22,8 +22,8 @@
         </dependency>
         <dependency>
             <groupId>com.artemkaxboy</groupId>
-            <artifactId>jib-entrypoint-prefix-extension-gradle</artifactId>
-            <version>0.0.3</version>
+            <artifactId>jib-custom-entrypoint-extension-gradle</artifactId>
+            <version>0.0.1</version>
         </dependency>
     </dependencies>
 
@@ -40,6 +40,11 @@
                         <groupId>com.google.cloud.tools</groupId>
                         <artifactId>jib-layer-filter-extension-maven</artifactId>
                         <version>0.1.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.artemkaxboy</groupId>
+                        <artifactId>jib-custom-entrypoint-extension-gradle</artifactId>
+                        <version>0.0.1</version>
                     </dependency>
                 </dependencies>
 
@@ -94,6 +99,15 @@
                                         <toLayer>this layer will not be created</toLayer>
                                     </filter>
                                 </filters>
+                            </configuration>
+                        </pluginExtension>
+
+                        <pluginExtension>
+                            <implementation>com.artemkaxboy.jib.maven.extension.entrypointprefix.entrypointprefix.JibEntrypointPrefixExtension</implementation>
+                            <configuration implementation="com.artemkaxboy.jib.maven.extension.entrypointprefix.entrypointprefix.Configuration">
+                                <entrypointPrefix>
+                                    <entrypointPrefix>echo</entrypointPrefix>
+                                </entrypointPrefix>
                             </configuration>
                         </pluginExtension>
                     </pluginExtensions>

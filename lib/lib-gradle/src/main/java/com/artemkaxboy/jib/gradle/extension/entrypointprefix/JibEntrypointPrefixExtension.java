@@ -8,6 +8,9 @@ import com.google.cloud.tools.jib.plugins.extension.JibPluginExtensionException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.annotation.Nullable;
 
 public class JibEntrypointPrefixExtension implements JibGradlePluginExtension<Configuration> {
 
@@ -24,21 +27,41 @@ public class JibEntrypointPrefixExtension implements JibGradlePluginExtension<Co
       GradleData gradleData,
       ExtensionLogger logger)
       throws JibPluginExtensionException {
+
     logger.log(ExtensionLogger.LogLevel.LIFECYCLE, "Running Jib Entrypoint Prefix Extension");
 
-    List<String> entrypoint = buildPlan.getEntrypoint();
-    if (entrypoint == null) {
-      throw new JibPluginExtensionException(getClass(), "cannot get image entrypoint");
-    }
-
-    if (!configuration.isPresent()) {
+    Configuration configurationValue = configuration.orElse(null);
+    if (configurationValue == null) {
       logger.log(
           ExtensionLogger.LogLevel.WARN, "Nothing configured for Jib Entrypoint Prefix Extension");
       return buildPlan;
     }
 
-    entrypoint.addAll(0, configuration.get().getEntrypointPrefix());
+    List<String> entrypoint = getNeededEntrypoint(buildPlan, configurationValue);
+    if (entrypoint == null) {
+      throw new JibPluginExtensionException(getClass(), "cannot get entrypoint");
+    }
 
-    return buildPlan.toBuilder().setEntrypoint(entrypoint).build();
+    List<String> resultEntrypoint =
+        Stream.of(
+                configuration.get().getEntrypointPrefix().stream(),
+                entrypoint.stream(),
+                configuration.get().getEntrypointSuffix().stream())
+            .flatMap(it -> it)
+            .collect(Collectors.toList());
+
+    logger.log(
+        ExtensionLogger.LogLevel.INFO, "New entrypoint is: " + String.join(" ", resultEntrypoint));
+
+    return buildPlan.toBuilder().setEntrypoint(resultEntrypoint).build();
+  }
+
+  @Nullable
+  private List<String> getNeededEntrypoint(
+      ContainerBuildPlan buildPlan, Configuration configuration) {
+
+    return configuration.hasEntryPoint()
+        ? configuration.getEntrypoint()
+        : buildPlan.getEntrypoint();
   }
 }

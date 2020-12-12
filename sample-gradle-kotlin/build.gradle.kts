@@ -4,8 +4,12 @@
 
 buildscript {
 
+    repositories {
+        mavenLocal()
+    }
+
     dependencies {
-        classpath("com.artemkaxboy:jib-custom-entrypoint-extension-gradle:0.0.1")
+        classpath("com.artemkaxboy:jib-custom-entrypoint-extension-gradle:0.0-SNAPSHOT")
     }
 }
 
@@ -62,6 +66,7 @@ jib {
             implementation = "com.artemkaxboy.jib.gradle.extension.entrypointprefix.JibEntrypointPrefixExtension"
             configuration(Action<com.artemkaxboy.jib.gradle.extension.entrypointprefix.Configuration> {
                 setEntrypointPrefix("/files/wait-for-it.sh google.com:80 --")
+                setEntrypointSuffix("suffix")
             })
         }
     }
