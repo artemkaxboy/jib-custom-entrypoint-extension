@@ -5,6 +5,7 @@ import com.google.cloud.tools.jib.gradle.extension.GradleData;
 import com.google.cloud.tools.jib.gradle.extension.JibGradlePluginExtension;
 import com.google.cloud.tools.jib.plugins.extension.ExtensionLogger;
 import com.google.cloud.tools.jib.plugins.extension.JibPluginExtensionException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,6 +31,7 @@ public class JibEntrypointPrefixExtension implements JibGradlePluginExtension<Co
 
     logger.log(ExtensionLogger.LogLevel.LIFECYCLE, "Running Jib Entrypoint Prefix Extension");
 
+    /* Get valid configuration or log and exit. */
     Configuration configurationValue = configuration.orElse(null);
     if (configurationValue == null) {
       logger.log(
@@ -44,10 +46,10 @@ public class JibEntrypointPrefixExtension implements JibGradlePluginExtension<Co
 
     List<String> resultEntrypoint =
         Stream.of(
-                configuration.get().getEntrypointPrefix().stream(),
+                configurationValue.getEntrypointPrefix().stream(),
                 entrypoint.stream(),
-                configuration.get().getEntrypointSuffix().stream())
-            .flatMap(it -> it)
+                configurationValue.getEntrypointSuffix().stream())
+            .flatMap(JibEntrypointPrefixExtension::splitEach)
             .collect(Collectors.toList());
 
     logger.log(
@@ -57,11 +59,17 @@ public class JibEntrypointPrefixExtension implements JibGradlePluginExtension<Co
   }
 
   @Nullable
-  private List<String> getNeededEntrypoint(
+  private static List<String> getNeededEntrypoint(
       ContainerBuildPlan buildPlan, Configuration configuration) {
 
     return configuration.hasEntryPoint()
         ? configuration.getEntrypoint()
         : buildPlan.getEntrypoint();
+  }
+
+  /* Cannot split in Configuration because maven set even private variables directly
+     without setters. */
+  private static Stream<String> splitEach(Stream<String> stream) {
+    return stream.flatMap(it -> Arrays.stream(it.split(" ")));
   }
 }
