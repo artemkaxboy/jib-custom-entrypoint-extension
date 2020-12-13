@@ -1,6 +1,6 @@
-package com.artemkaxboy.jib.maven.extension.entrypointprefix.entrypointprefix;
+package com.artemkaxboy.jib.maven.extension.entrypointprefix;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -18,9 +18,23 @@ import java.util.List;
  */
 public class Configuration {
 
-  private final List<String> entrypointPrefix = new ArrayList<>();
+  private final List<String> entrypointPrefix = new LinkedList<>();
+  private final List<String> entrypoint = new LinkedList<>();
+  private final List<String> entrypointSuffix = new LinkedList<>();
 
   public List<String> getEntrypointPrefix() {
     return entrypointPrefix;
+  }
+
+  boolean hasEntryPoint() {
+    return getEntrypoint().size() > 0;
+  }
+
+  public List<String> getEntrypoint() {
+    return entrypoint;
+  }
+
+  public List<String> getEntrypointSuffix() {
+    return entrypointSuffix;
   }
 }

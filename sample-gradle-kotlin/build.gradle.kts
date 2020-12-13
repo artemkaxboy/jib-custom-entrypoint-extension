@@ -66,7 +66,7 @@ jib {
             implementation = "com.artemkaxboy.jib.gradle.extension.entrypointprefix.JibEntrypointPrefixExtension"
             configuration(Action<com.artemkaxboy.jib.gradle.extension.entrypointprefix.Configuration> {
                 setEntrypointPrefix("/files/wait-for-it.sh google.com:80 --")
-                setEntrypointSuffix("suffix")
+                setEntrypointSuffix("gradle-kotlin suffix")
             })
         }
     }
