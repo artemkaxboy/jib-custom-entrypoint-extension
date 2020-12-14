@@ -1,6 +1,6 @@
 # Custom Entrypoint extension for Google Jib Demo project
 
-Project shows how to use [Custom Entrypoint extension](https://github.com/artemkaxboy/jib-custom-entrypoint-extension-gradle) for [Google Jib gradle plugin](https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin) to customize target image entrypoint.
+Project shows how to use [Custom Entrypoint extension](..) for [Google Jib gradle plugin](https://github.com/GoogleContainerTools/jib/tree/master/jib-gradle-plugin) to customize target image entrypoint. It adds a prefix to the entrypoint which runs wait-for-it.sh. Script checks availability of port 80 at google.com and then runs the java application with arguments.
 
 ## How to build
 

@@ -4,12 +4,8 @@
 
 buildscript {
 
-    repositories {
-        mavenLocal()
-    }
-
     dependencies {
-        classpath "com.artemkaxboy:jib-custom-entrypoint-extension-gradle:0.0-SNAPSHOT"
+        classpath "com.artemkaxboy:jib-custom-entrypoint-extension-gradle:0.1.0"
     }
 }
 
@@ -28,15 +24,17 @@ version = "1.0-SNAPSHOT"
 jib {
 
     // default image does not contain anything except java, even shell, but adoptopenjdk does
+    // we need it to run our wait-for-it.sh
     from {
         image = "adoptopenjdk:11-jdk"
     }
 
+    // override default image name
     to {
         image = "jib-custom-entrypoint"
     }
 
-    // copy custom script into image and make it executable
+    // copy custom script from current directory into image and make it executable
     extraDirectories {
 
         paths {
@@ -55,7 +53,7 @@ jib {
     // recommended ways to control containers startup order.
 
     // Add prefix to an image entrypoint which runs wait-for-it.sh. Script checks availability of
-    // port 80 at google.com and then runs the java app.
+    // port 80 at google.com and then runs the java application with arguments.
     pluginExtensions {
         pluginExtension {
             implementation = "com.artemkaxboy.jib.gradle.extension.customentrypoint.JibCustomEntrypointExtension"

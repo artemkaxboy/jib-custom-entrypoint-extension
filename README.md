@@ -1,77 +1,25 @@
-# Docker entrypoint Prefix customization extension for Google jib
+# Jib Custom Entrypoint Extension
 
-## How to use
+A general-purpose extension that enables to customize an image's entrypoint by adding prefix/suffix to the original entrypoint or override it completely.
+
+## How it works
+
+Extensions allow one to customize Google Jib Docker image entrypoint by adding specific prefixes/suffixes to the original one and therefore to avoid overriding classpath and main-class.
+
+Example:
+
+Default implicit entrypoint: ```java -cp /app/resources:/app/classes:/app/libs/* Application``` after adding prefix ```./wait-for-it.sh google.com:80 --``` become ```./wait-for-it.sh google.com:80 -- java -cp /app/resources:/app/classes:/app/libs/* Application``` which makes health-check requests before running the application. (Example requires shell in base image and [wait-for-it](https://github.com/vishnubob/wait-for-it) script)
+
+## Extensions and Examples
 
 ### Gradle
 
-#### Add buildscript.dependencies
+[Extension source code](lib/lib-gradle)
 
-```build.gradle```:
+Sample projects: [Kotlin](sample-gradle-kotlin)/[Java](sample-gradle-java)
 
-```groovy
-// should be at the top of build.gradle
-buildscript {
+### Maven
 
-    dependencies {
-        classpath "com.artemkaxboy:jib-custom-entrypoint-extension-gradle:0.0.1"
-    }
-}
-```
+[Extension source code](lib/lib-maven)
 
-or ```build.gradle.kts```:
-
-```kotlin
-// should be at the top of build.gradle.kts
-buildscript {
-
-    dependencies {
-        classpath("com.artemkaxboy:jib-custom-entrypoint-extension-gradle:0.0.1")
-    }
-}
-```
-
-#### Add Jib plugin
-
-```build.gradle```/```build.gradle.kts```:
-
-```groovy
-plugins {
-    ...
-    // Google JIB dependency
-    id("com.google.cloud.tools.jib") version "2.7.0"
-}
-```
-
-#### Setup entrypoint prefix
-
-```build.gradle.kts```:
-
-```kotlin
-jib {
-    ...
-    pluginExtensions {
-        pluginExtension {
-            implementation = "JibEntrypointPrefixExtension"
-            configuration(Action<Configuration> {
-                setEntrypointPrefix("/files/wait-for-it.sh google.com:80 --")
-            })
-        }
-    }
-}
-```
-
-or ```build.gradle```:
-
-```groovy
-jib {
-    ...
-    pluginExtensions {
-        pluginExtension {
-            implementation = "JibEntrypointPrefixExtension"
-            configuration {
-                setEntrypointPrefix("/files/wait-for-it.sh google.com:80 --")
-            }
-        }
-    }
-}
-```
+Sample project: [Java](sample-maven-java)

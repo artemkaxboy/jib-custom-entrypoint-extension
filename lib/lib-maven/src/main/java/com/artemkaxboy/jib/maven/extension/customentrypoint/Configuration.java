@@ -9,10 +9,9 @@ import java.util.List;
  * <p>Example usage in {@code pom.xml}:
  *
  * <pre>{@code
- * <configuration implementation="com.google.cloud.tools.jib.maven.extension.ownership.Configuration">
- *   <entrypointPrefix>./wait-for-it.sh</entrypointPrefix>
- *   <entrypointPrefix>postgres:5432</entrypointPrefix>
- *   <entrypointPrefix>--</entrypointPrefix>
+ * <configuration implementation="com.artemkaxboy.jib.maven.extension.customentrypoint.Configuration">
+ *   <entrypointPrefix>/files/wait-for-it.sh google.com:80 --</entrypointPrefix>
+ *   <entrypointSuffix>argument1 argument2</entrypointSuffix>
  * </configuration>
  * }</pre>
  */
