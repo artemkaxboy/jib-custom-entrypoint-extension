@@ -1,52 +1,25 @@
-# Docker entrypoint Prefix customization extension for Google jib
+# Jib Custom Entrypoint Extension
 
-## How to use
+A general-purpose extension that enables to customize an image's entrypoint by adding prefix/suffix to the original entrypoint or override it completely.
 
-### Add buildscript.dependencies
+## How it works
 
-First you need to add dependency to build.gradle.kts:
+Extensions allow one to customize Google Jib Docker image entrypoint by adding specific prefixes/suffixes to the original one and therefore to avoid overriding classpath and main-class.
 
-```kotlin
-// should be at the top of build.gradle.kts
-buildscript {
+Example:
 
-    repositories {
-        maven { url = uri("https://jitpack.io") }
-    }
+Default implicit entrypoint: ```java -cp /app/resources:/app/classes:/app/libs/* Application``` after adding prefix ```./wait-for-it.sh google.com:80 --``` become ```./wait-for-it.sh google.com:80 -- java -cp /app/resources:/app/classes:/app/libs/* Application``` which makes health-check requests before running the application. (Example requires shell in base image and [wait-for-it](https://github.com/vishnubob/wait-for-it) script)
 
-    dependencies {
-        classpath("com.artemkaxboy:jib-entrypoint-prefix-extension-gradle:0.1.1")
-    }
-}
-```
+## Extensions and Examples
 
-### Add Jib plugin
+### Gradle
 
-Add Jib plugin to build.gradle.kts:
+[Extension source code](lib/lib-gradle)
 
-```kotlin
-plugins {
-    ...
-    // Google JIB dependency
-    id("com.google.cloud.tools.jib") version "2.7.0"
-}
-```
+Sample projects: [Kotlin](sample-gradle-kotlin)/[Java](sample-gradle-java)
 
-### Setup entrypoint prefix
+### Maven
 
-Setup entrypoint prefix in ```jib``` plugin section of build.gradle.kts:
+[Extension source code](lib/lib-maven)
 
-```kotlin
-jib {
-    ...
-
-    pluginExtensions {
-        pluginExtension {
-            implementation = "com.artemkaxboy.jib.gradle.extension.entrypointprefix.JibEntrypointPrefixExtension"
-            configuration(Action<com.artemkaxboy.jib.gradle.extension.entrypointprefix.Configuration> {
-                setEntrypointPrefix("/files/wait-for-it.sh google.com:80 --")
-            })
-        }
-    }
-}
-```
+Sample project: [Java](sample-maven-java)

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.artemkaxboy</groupId>
+    <artifactId>sample-maven-java</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>sample-maven-java</name>
+    <description>Demo Project</description>
+
+    <properties>
+        <java.version>11</java.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <!-- Add jib-maven-plugin -->
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>2.7.0</version>
+
+                <!-- Have extension classes available on Jib's runtime classpath -->
+                <dependencies>
+                    <dependency>
+                        <groupId>com.artemkaxboy</groupId>
+                        <artifactId>jib-custom-entrypoint-extension-maven</artifactId>
+                        <version>0.1.0</version>
+                    </dependency>
+                </dependencies>
+
+                <configuration>
+
+                    <!-- Default image does not contain anything except java, even shell,
+                     but adoptopenjdk does. We need it to run our wait-for-it.sh-->
+                    <from>
+                        <image>adoptopenjdk:11-jdk</image>
+                    </from>
+
+                    <!-- override default image name -->
+                    <to>
+                        <image>jib-custom-entrypoint</image>
+                    </to>
+
+                    <!-- copy custom script from current directory into image and make it executable -->
+                    <extraDirectories>
+                        <paths>
+                            <path>
+                                <from>files</from>
+                                <into>/files</into>
+                            </path>
+                        </paths>
+                        <permissions>
+                            <permission>
+                                <file>/files/wait-for-it.sh</file>
+                                <mode>755</mode>
+                            </permission>
+                        </permissions>
+                    </extraDirectories>
+
+                    <pluginExtensions>
+
+                        <!-- https://docs.docker.com/compose/startup-order/ -->
+                        <!-- According the official docker guide, https://github.com/vishnubob/wait-for-it is one of -->
+                        <!-- recommended ways to control containers startup order. -->
+                        <!-- Add prefix to an image entrypoint which runs wait-for-it.sh. -->
+                        <!-- Script checks availability of port 80 at google.com and then runs the java application with arguments. -->
+                        <pluginExtension>
+                            <implementation>
+                                com.artemkaxboy.jib.maven.extension.customentrypoint.JibCustomEntrypointExtension
+                            </implementation>
+                            <configuration
+                                    implementation="com.artemkaxboy.jib.maven.extension.customentrypoint.Configuration">
+                                <entrypointPrefix>/files/wait-for-it.sh google.com:80 --</entrypointPrefix>
+                                <entrypointSuffix>maven-java suffix</entrypointSuffix>
+                            </configuration>
+                        </pluginExtension>
+                    </pluginExtensions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

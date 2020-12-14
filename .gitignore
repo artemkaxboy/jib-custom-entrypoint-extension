@@ -2,4 +2,7 @@
 .gradle/
 build/
 
+target/
+*.iml
+
 /.idea/

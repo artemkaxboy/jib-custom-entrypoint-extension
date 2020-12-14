@@ -1,18 +1,28 @@
+// Must be at the beginning of the file
+buildscript {
+    dependencies {
+        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.22.0"
+    }
+}
+
 // define all versioned plugins here and apply in subprojects as necessary without version
 plugins {
-    id 'com.github.sherter.google-java-format' version '0.9' apply false
+    id "com.github.sherter.google-java-format" version "0.9" apply false
 }
 
 subprojects {
-    group 'com.artemkaxboy'
+    group "com.artemkaxboy"
 
     repositories {
         mavenCentral()
     }
 
-    apply plugin: 'java'
-    apply plugin: 'checkstyle'
-    apply plugin: 'com.github.sherter.google-java-format'
+    apply plugin: "java-library"
+//    apply plugin: "checkstyle"
+    apply plugin: "com.github.sherter.google-java-format"
+    apply plugin: "signing"
+    apply plugin: "maven"
+    apply plugin: "io.codearte.nexus-staging"
 
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
@@ -21,25 +31,25 @@ subprojects {
     // define all common versioned dependencies here
     project.ext.dependencyVersions = [
 
-            JIB_CORE: '0.15.0',
-            JIB_GRADLE: '2.7.0',
+            JIB_CORE: "0.15.0",
+            JIB_GRADLE: "2.7.0",
 
             // for Build Plan and Jib Plugins Extension API
-            JIB_GRADLE_EXTENSION: '0.4.0',
-            JIB_MAVEN_EXTENSION: '0.4.0',
+            JIB_GRADLE_EXTENSION: "0.4.0",
+            JIB_MAVEN_EXTENSION: "0.4.0",
 
-            MAVEN_API: '3.6.3',
+            MAVEN_API: "3.6.3",
 
             //test
-            JUNIT: '4.13.1',
-            MOCKITO_CORE: '3.4.6',
-            SLF4J_API: '1.7.30',
+            JUNIT: "4.13.1",
+            MOCKITO_CORE: "3.4.6",
+            SLF4J_API: "1.7.30",
     ]
     /* PROJECT DEPENDENCY VERSIONS */
 
     /* GOOGLE JAVA FORMAT */
     googleJavaFormat {
-        toolVersion = '1.6'
+        toolVersion = "1.6"
     }
     check.dependsOn verifyGoogleJavaFormat
     /* GOOGLE JAVA FORMAT */
@@ -47,7 +57,7 @@ subprojects {
     /* JAVADOC ENFORCEMENT */
     // Fail build on javadoc warnings
     tasks.withType(Javadoc) {
-        options.addBooleanOption('Xwerror', true)
+        options.addBooleanOption("Xwerror", true)
     }
     assemble.dependsOn javadoc
     /* JAVADOC ENFORCEMENT */
@@ -55,13 +65,81 @@ subprojects {
     /* JAR */
     jar {
         manifest {
-            attributes 'Implementation-Title': project.name,
-                    'Implementation-Version': version,
-                    'Built-By': System.getProperty('user.name'),
-                    'Built-Date': new Date(),
-                    'Built-JDK': System.getProperty('java.version'),
-                    'Built-Gradle': gradle.gradleVersion
+            attributes "Implementation-Title": project.name,
+                    "Implementation-Version": project.version,
+                    "Built-By": System.getProperty("user.name"),
+                    "Built-Date": new Date(),
+                    "Built-JDK": System.getProperty("java.version"),
+                    "Built-Gradle": gradle.gradleVersion
         }
     }
     /* JAR */
+
+    /* PUBLISHING */
+    task javadocJar(type: Jar) {
+        setProperty("archiveClassifier", "javadoc")
+        from javadoc
+    }
+
+    task sourcesJar(type: Jar) {
+        setProperty("archiveClassifier", "sources")
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives javadocJar, sourcesJar
+    }
+
+    // https://central.sonatype.org/pages/gradle.html
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
+
+                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
+
+                pom.project {
+                    name "Custom Entrypoint Extension for Jib Plugin"
+                    packaging "jar"
+                    // optionally artifactId can be defined here
+                    description "Allows customizing entrypoint."
+                    url "https://github.com/artemkaxboy/jib-custom-entrypoint-extension"
+
+                    scm {
+                        connection "https://github.com/artemkaxboy/jib-custom-entrypoint-extension"
+                        developerConnection "https://github.com/artemkaxboy/jib-custom-entrypoint-extension"
+                        url "https://github.com/artemkaxboy/jib-custom-entrypoint-extension"
+                    }
+
+                    licenses {
+                        license {
+                            name "The Apache License, Version 2.0"
+                            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id "artemkaxboy"
+                            name "Artem Kolin"
+                            email "artemkaxboy@gmail.com"
+                        }
+                    }
+                }
+            }
+        }
+    }
+    /* PUBLISHING */
+
+    /* SIGNING */
+    signing {
+        sign configurations.archives
+    }
+    /* SIGNING */
 }

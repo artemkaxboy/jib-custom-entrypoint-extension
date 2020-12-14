@@ -1,52 +1,48 @@
-# Docker entrypoint Prefix customization extension for Google jib
+# Jib Custom Entrypoint Extension
 
-## How to use
+A general-purpose extension that enables to customize an image's entrypoint by adding prefix/suffix to the original entrypoint or override it completely.
 
-### Add buildscript.dependencies
+## Examples
 
-First you need to add dependency to build.gradle.kts:
+Check out the [general instructions](https://github.com/GoogleContainerTools/jib-extensions/blob/master/README.md) for applying a Jib plugin extension.
 
-```kotlin
-// should be at the top of build.gradle.kts
+```gradle
+// should be at the top of build.gradle
 buildscript {
-
-    repositories {
-        maven { url = uri("https://jitpack.io") }
-    }
-
-    dependencies {
-        classpath("com.artemkaxboy:jib-entrypoint-prefix-extension-gradle:0.1.1")
-    }
+  dependencies {
+    classpath('com.artemkaxboy:jib-custom-entrypoint-extension-gradle:0.1.0')
+  }
 }
-```
 
-### Add Jib plugin
+...
 
-Add Jib plugin to build.gradle.kts:
-
-```kotlin
-plugins {
-    ...
-    // Google JIB dependency
-    id("com.google.cloud.tools.jib") version "2.7.0"
-}
-```
-
-### Setup entrypoint prefix
-
-Setup entrypoint prefix in ```jib``` plugin section of build.gradle.kts:
-
-```kotlin
 jib {
-    ...
-
-    pluginExtensions {
-        pluginExtension {
-            implementation = "com.artemkaxboy.jib.gradle.extension.entrypointprefix.JibEntrypointPrefixExtension"
-            configuration(Action<com.artemkaxboy.jib.gradle.extension.entrypointprefix.Configuration> {
-                setEntrypointPrefix("/files/wait-for-it.sh google.com:80 --")
-            })
-        }
+  ...
+  pluginExtensions {
+    pluginExtension {
+      implementation = 'com.artemkaxboy.jib.gradle.extension.customentrypoint.JibCustomEntrypointExtension'
+      configuration {
+        setEntrypointPrefix("/files/wait-for-it.sh google.com:80 --")
+        setEntrypointSuffix("argument1 argument2")
+      }
     }
+  }
 }
 ```
+
+Kotlin requires specifying the type for `pluginExtension.configuration`.
+
+```kotlin
+  pluginExtension {
+    implementation = "com.artemkaxboy.jib.gradle.extension.customentrypoint.JibCustomEntrypointExtension"
+    configuration(Action<com.artemkaxboy.jib.gradle.extension.customentrypoint.Configuration> {
+        setEntrypointPrefix("/files/wait-for-it.sh google.com:80 --")
+        setEntrypointSuffix("argument1 argument2")
+    })
+  }
+```
+
+## Conventions
+
+-   Omitting `setEntrypointPrefix`/`setEntrypointSuffix` leaves suffix/prefix empty.
+-   Omitting `setEntrypoint` leaves original one untouched.
