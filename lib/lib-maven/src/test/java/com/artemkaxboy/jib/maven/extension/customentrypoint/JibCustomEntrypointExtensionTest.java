@@ -6,8 +6,6 @@ import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.artemkaxboy.jib.maven.extension.customentrypoint.Configuration;
-import com.artemkaxboy.jib.maven.extension.customentrypoint.JibCustomEntrypointExtension;
 import com.google.cloud.tools.jib.api.buildplan.ContainerBuildPlan;
 import com.google.cloud.tools.jib.plugins.extension.ExtensionLogger;
 import com.google.cloud.tools.jib.plugins.extension.JibPluginExtensionException;

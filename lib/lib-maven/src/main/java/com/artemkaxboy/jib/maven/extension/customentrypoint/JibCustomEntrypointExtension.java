@@ -68,7 +68,7 @@ public class JibCustomEntrypointExtension implements JibMavenPluginExtension<Con
   }
 
   /* Cannot split in Configuration because maven set even private variables directly
-     without setters. */
+  without setters. */
   private static Stream<String> splitEach(Stream<String> stream) {
     return stream.flatMap(it -> Arrays.stream(it.split(" ")));
   }

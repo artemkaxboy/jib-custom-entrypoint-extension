@@ -25,7 +25,7 @@ import org.gradle.api.provider.ListProperty;
  *     }
  *   }
  * }
- * }</pre
+ * }</pre>
  *
  * {@code build.gradle}:
  *
