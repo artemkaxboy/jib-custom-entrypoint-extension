@@ -1,4 +1,4 @@
-package com.artemkaxboy.jib.gradle.extension.entrypointprefix;
+package com.artemkaxboy.jib.gradle.extension.customentrypoint;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,8 +17,8 @@ import org.gradle.api.provider.ListProperty;
  * jib {
  *   pluginExtensions {
  *     pluginExtension {
- *       implementation = "com.artemkaxboy.jib.gradle.extension.entrypointprefix.JibEntrypointExtension"
- *       configuration(Action<com.artemkaxboy.jib.gradle.extension.entrypointprefix.Configuration> {
+ *       implementation = "com.artemkaxboy.jib.gradle.extension.customentrypoint.JibCustomEntrypointExtension"
+ *       configuration(Action<com.artemkaxboy.jib.gradle.extension.customentrypoint.Configuration> {
  *         entrypointPrefix = listOf("./wait-for-it.sh", "postgres:5432", "--")
  *       })
  *     }
@@ -28,8 +28,8 @@ import org.gradle.api.provider.ListProperty;
  * jib {
  *   pluginExtensions {
  *     pluginExtension {
- *       implementation = "com.artemkaxboy.jib.gradle.extension.entrypointprefix.JibEntrypointExtension"
- *       configuration(Action<com.artemkaxboy.jib.gradle.extension.entrypointprefix.Configuration> {
+ *       implementation = "com.artemkaxboy.jib.gradle.extension.customentrypoint.JibCustomEntrypointExtension"
+ *       configuration(Action<com.artemkaxboy.jib.gradle.extension.customentrypoint.Configuration> {
  *         setEntrypointPrefix("./wait-for-it.sh postgres:5432 --")
  *       })
  *     }
@@ -68,9 +68,9 @@ public class Configuration {
     }
 
     /**
-     * Sets entrypoint prefix configuration.
+     * Sets custom entrypoint configuration.
      *
-     * @param action closure representing an entrypoint prefix configuration
+     * @param action closure representing a custom entrypoint configuration
      */
     public void entrypointPrefix(Action<? super List<String>> action) {
       @SuppressWarnings("unchecked")

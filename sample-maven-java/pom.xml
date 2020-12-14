@@ -53,7 +53,7 @@
                         <image>adoptopenjdk:11-jdk</image>
                     </from>
                     <to>
-                        <image>jib-custom-prefix</image>
+                        <image>jib-custom-entrypoint</image>
                     </to>
                     <extraDirectories>
                         <paths>
@@ -74,10 +74,10 @@
 
                         <pluginExtension>
                             <implementation>
-                                com.artemkaxboy.jib.maven.extension.entrypointprefix.JibEntrypointPrefixExtension
+                                com.artemkaxboy.jib.maven.extension.customentrypoint.JibCustomEntrypointExtension
                             </implementation>
                             <configuration
-                                    implementation="com.artemkaxboy.jib.maven.extension.entrypointprefix.Configuration">
+                                    implementation="com.artemkaxboy.jib.maven.extension.customentrypoint.Configuration">
                                 <entrypointPrefix>/files/wait-for-it.sh google.com:80 --</entrypointPrefix>
                                 <entrypointSuffix>maven-java suffix</entrypointSuffix>
                             </configuration>

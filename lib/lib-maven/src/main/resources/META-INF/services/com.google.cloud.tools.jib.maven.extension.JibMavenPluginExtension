@@ -1,1 +1,1 @@
-com.artemkaxboy.jib.maven.extension.entrypointprefix.JibEntrypointPrefixExtension
+com.artemkaxboy.jib.maven.extension.customentrypoint.JibCustomEntrypointExtension

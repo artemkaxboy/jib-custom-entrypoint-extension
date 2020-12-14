@@ -1,4 +1,4 @@
-package com.artemkaxboy.jib.maven.extension.entrypointprefix;
+package com.artemkaxboy.jib.maven.extension.customentrypoint;
 
 import java.util.LinkedList;
 import java.util.List;

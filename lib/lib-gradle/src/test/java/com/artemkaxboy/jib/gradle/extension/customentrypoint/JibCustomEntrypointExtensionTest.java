@@ -1,4 +1,4 @@
-package com.artemkaxboy.jib.gradle.extension.entrypointprefix;
+package com.artemkaxboy.jib.gradle.extension.customentrypoint;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -19,7 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class JibEntrypointPrefixExtensionTest {
+public class JibCustomEntrypointExtensionTest {
 
   private static final List<String> defaultEntrypoint =
       Arrays.asList("java", "-cp", "/app/resources:/app/classes:/app/libs/*", "main.class");
@@ -38,7 +38,7 @@ public class JibEntrypointPrefixExtensionTest {
     assertThrows(
         JibPluginExtensionException.class,
         () ->
-            new JibEntrypointPrefixExtension()
+            new JibCustomEntrypointExtension()
                 .extendContainerBuildPlan(
                     buildPlan, null, Optional.of(configuration), null, logger));
   }
@@ -46,7 +46,7 @@ public class JibEntrypointPrefixExtensionTest {
   @Test
   public void testExtendContainerBuildPlan_noConfiguration() throws JibPluginExtensionException {
     ContainerBuildPlan newPlan =
-        new JibEntrypointPrefixExtension()
+        new JibCustomEntrypointExtension()
             .extendContainerBuildPlan(buildPlan, null, Optional.empty(), null, logger);
 
     assertSame(buildPlan, newPlan);
@@ -54,7 +54,7 @@ public class JibEntrypointPrefixExtensionTest {
     verify(logger)
         .log(
             ExtensionLogger.LogLevel.WARN,
-            "Nothing configured for Jib Entrypoint Prefix Extension");
+            "Nothing configured for Jib Custom Entrypoint Extension");
   }
 
   @Test
@@ -66,7 +66,7 @@ public class JibEntrypointPrefixExtensionTest {
     expected.addAll(defaultEntrypoint);
 
     ContainerBuildPlan newPlan =
-        new JibEntrypointPrefixExtension()
+        new JibCustomEntrypointExtension()
             .extendContainerBuildPlan(buildPlan, null, Optional.of(configuration), null, logger);
 
     assertEquals(expected, newPlan.getEntrypoint());

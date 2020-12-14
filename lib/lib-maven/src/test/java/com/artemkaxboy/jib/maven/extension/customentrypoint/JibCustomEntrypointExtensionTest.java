@@ -1,4 +1,4 @@
-package com.artemkaxboy.jib.maven.extension.entrypointprefix.entrypointprefix;
+package com.artemkaxboy.jib.maven.extension.customentrypoint;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -6,8 +6,8 @@ import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.artemkaxboy.jib.maven.extension.entrypointprefix.Configuration;
-import com.artemkaxboy.jib.maven.extension.entrypointprefix.JibEntrypointPrefixExtension;
+import com.artemkaxboy.jib.maven.extension.customentrypoint.Configuration;
+import com.artemkaxboy.jib.maven.extension.customentrypoint.JibCustomEntrypointExtension;
 import com.google.cloud.tools.jib.api.buildplan.ContainerBuildPlan;
 import com.google.cloud.tools.jib.plugins.extension.ExtensionLogger;
 import com.google.cloud.tools.jib.plugins.extension.JibPluginExtensionException;
@@ -21,7 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class JibEntrypointPrefixExtensionTest {
+public class JibCustomEntrypointExtensionTest {
 
   private static final List<String> defaultEntrypoint =
       Arrays.asList("java", "-cp", "/app/resources:/app/classes:/app/libs/*", "main.class");
@@ -40,7 +40,7 @@ public class JibEntrypointPrefixExtensionTest {
     assertThrows(
         JibPluginExtensionException.class,
         () ->
-            new JibEntrypointPrefixExtension()
+            new JibCustomEntrypointExtension()
                 .extendContainerBuildPlan(
                     buildPlan, null, Optional.of(configuration), null, logger));
   }
@@ -48,7 +48,7 @@ public class JibEntrypointPrefixExtensionTest {
   @Test
   public void testExtendContainerBuildPlan_noConfiguration() throws JibPluginExtensionException {
     ContainerBuildPlan newPlan =
-        new JibEntrypointPrefixExtension()
+        new JibCustomEntrypointExtension()
             .extendContainerBuildPlan(buildPlan, null, Optional.empty(), null, logger);
 
     assertSame(buildPlan, newPlan);
@@ -56,7 +56,7 @@ public class JibEntrypointPrefixExtensionTest {
     verify(logger)
         .log(
             ExtensionLogger.LogLevel.WARN,
-            "Nothing configured for Jib Entrypoint Prefix Extension");
+            "Nothing configured for Jib Custom Entrypoint Extension");
   }
 
   @Test
@@ -68,7 +68,7 @@ public class JibEntrypointPrefixExtensionTest {
     expected.addAll(defaultEntrypoint);
 
     ContainerBuildPlan newPlan =
-        new JibEntrypointPrefixExtension()
+        new JibCustomEntrypointExtension()
             .extendContainerBuildPlan(buildPlan, null, Optional.of(configuration), null, logger);
 
     assertEquals(expected, newPlan.getEntrypoint());

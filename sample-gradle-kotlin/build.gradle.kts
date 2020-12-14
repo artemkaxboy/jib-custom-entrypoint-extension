@@ -38,7 +38,7 @@ jib {
     }
 
     to {
-        image = "jib-custom-prefix"
+        image = "jib-custom-entrypoint"
     }
 
     // copy custom script into image and make it executable
@@ -63,8 +63,9 @@ jib {
     // port 80 at google.com and then runs the java app.
     pluginExtensions {
         pluginExtension {
-            implementation = "com.artemkaxboy.jib.gradle.extension.entrypointprefix.JibEntrypointPrefixExtension"
-            configuration(Action<com.artemkaxboy.jib.gradle.extension.entrypointprefix.Configuration> {
+            implementation = "com.artemkaxboy.jib.gradle.extension.customentrypoint.JibCustomEntrypointExtension"
+            @Suppress("RedundantSamConstructor")
+            configuration(Action<com.artemkaxboy.jib.gradle.extension.customentrypoint.Configuration> {
                 setEntrypointPrefix("/files/wait-for-it.sh google.com:80 --")
                 setEntrypointSuffix("gradle-kotlin suffix")
             })

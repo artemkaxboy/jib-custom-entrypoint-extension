@@ -105,7 +105,7 @@ subprojects {
                 }
 
                 pom.project {
-                    name "Entrypoint Prefix Extension for Jib Plugin"
+                    name "Custom Entrypoint Extension for Jib Plugin"
                     packaging "jar"
                     // optionally artifactId can be defined here
                     description "Allows customizing entrypoint."
