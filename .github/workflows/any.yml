@@ -3,8 +3,9 @@ name: Default branch verification
 
 on:
   push:
-    branches:
-      - publishing
+    tags:
+      - v*.*
+      - v*.*.*
 
 jobs:
 
