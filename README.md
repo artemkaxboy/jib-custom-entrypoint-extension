@@ -8,18 +8,18 @@ Extensions allow one to customize Google Jib Docker image entrypoint by adding s
 
 Example:
 
-Default implicit entrypoint: ```java -cp /app/resources:/app/classes:/app/libs/* Application``` after adding prefix ```./wait-for-it.sh google.com:80 --``` become ```./wait-for-it.sh google.com:80 -- java -cp /app/resources:/app/classes:/app/libs/* Application``` which makes health-check requests before running the application. (Example requires shell in base image and [wait-for-it](https://github.com/vishnubob/wait-for-it) script)
+Default entrypoint: ```java -cp /app/resources:/app/classes:/app/libs/* Application``` after adding prefix ```./wait-for-it.sh google.com:80 --``` becomes ```./wait-for-it.sh google.com:80 -- java -cp /app/resources:/app/classes:/app/libs/* Application``` which makes health-check requests before running the application.
 
 ## Extensions and Examples
 
 ### Gradle
 
-[Extension source code](lib/lib-gradle)
+[Extension Documentation/Source code](lib/lib-gradle)
 
 Sample projects: [Kotlin](sample-gradle-kotlin)/[Java](sample-gradle-java)
 
 ### Maven
 
-[Extension source code](lib/lib-maven)
+[Extension Documentation/Source code](lib/lib-maven)
 
 Sample project: [Java](sample-maven-java)
