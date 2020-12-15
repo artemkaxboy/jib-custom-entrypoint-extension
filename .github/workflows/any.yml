@@ -35,13 +35,13 @@ jobs:
         run: |
           echo '${{secrets.GPG_KEY_CONTENTS}}' | base64 -d > publish_key.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="${{secrets.GPG_SECRET_PASSPHRASE}}" \
-            --output secret.gpg publish_key.gpg
+            --output $HOME/secret.gpg publish_key.gpg
 
       - name: Publish with Gradle
         uses: eskatos/gradle-command-action@v1
         with:
           arguments: |
-            sign getStagingProfile -i -Psigning.secretKeyRingFile=~/secret.gpg
+            sign getStagingProfile -i -Psigning.secretKeyRingFile=$HOME/secret.gpg
               -Psigning.password=${{secrets.SIGNING_PASSWORD}}
               -PossrhUsername=${{secrets.OSSRH_USERNAME}}
               -PossrhPassword=${{secrets.OSSRH_PASSWORD}}
