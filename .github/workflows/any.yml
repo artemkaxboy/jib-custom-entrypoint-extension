@@ -38,7 +38,7 @@ jobs:
           arguments: |
             sign getStagingProfile -i
               -Psigning.password=${{ secrets.SIGNING_PASSWORD }}
-              -Possrh.username=${{ secrets.OSSRH_USERNAME }}
-              -Possrh.password=${{ secrets.OSSRH_PASSWORD }}
+              -PossrhUsername=${{ secrets.OSSRH_USERNAME }}
+              -PossrhPassword=${{ secrets.OSSRH_PASSWORD }}
           wrapper-directory: lib
           build-root-directory: lib
